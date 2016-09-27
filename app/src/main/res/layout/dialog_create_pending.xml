@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimaryDark"
+    android:padding="24dp">
+
+    <EditText
+        android:background="@drawable/bg_white_underline_accent"
+        android:id="@+id/pendingInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical"
+        android:hint="Creame una tarea"
+        android:padding="8dp"
+        android:maxLines="1"
+        android:singleLine="true"/>
+
+    <ImageButton
+        android:background="@drawable/bg_accent"
+        android:id="@+id/saveBtn"
+        android:layout_width="34dp"
+        android:layout_height="match_parent"
+        android:src="@mipmap/ic_save_white_24dp"/>
+
+</LinearLayout>
