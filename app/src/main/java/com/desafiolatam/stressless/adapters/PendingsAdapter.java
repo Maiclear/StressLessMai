@@ -1,10 +1,12 @@
 package com.desafiolatam.stressless.adapters;
 
+import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,11 +33,37 @@ public class PendingsAdapter extends RecyclerView.Adapter<PendingsAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Pending pending = pendingList.get(position);
+        final Pending pending = pendingList.get(position);
 
         holder.status.setChecked(pending.isDone());
 
         holder.name.setText(pending.getName());
+
+        final int auxPosition = position;
+        holder.status.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            pending.setDone(true);
+                            pending.save();
+                            try{
+                                pendingList.remove(auxPosition);
+                                notifyItemRemoved(auxPosition);
+                            }catch (IndexOutOfBoundsException e) {
+
+                            }
+
+
+
+                        }
+                    }, 100);
+                }
+            }
+        });
+
 
     }
 

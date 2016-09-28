@@ -15,7 +15,7 @@ public class Pendings {
 
     public List<Pending> all() {
         List<Pending> pendings = new ArrayList<>();
-        List<Pending> pendingList = Pending.listAll(Pending.class);
+        List<Pending> pendingList = Pending.find(Pending.class,"done = 0");
         if (pendingList != null && pendingList.size() > 0) {
             pendings.addAll(pendingList);
         }
