@@ -23,10 +23,11 @@ import android.widget.Toast;
 import com.desafiolatam.stressless.R;
 import com.desafiolatam.stressless.models.Pending;
 import com.desafiolatam.stressless.views.MainActivityFragment;
+import com.desafiolatam.stressless.views.main.menu.SearchListener;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements CreationCallback {
+public class MainActivity extends AppCompatActivity implements CreationCallback, SearchListener {
 
     private EditText pendingInput;
     private Dialog dialog;
@@ -123,5 +124,10 @@ public class MainActivity extends AppCompatActivity implements CreationCallback 
     @Override
     public void noName() {
         pendingInput.setError("!");
+    }
+
+    @Override
+    public void search(String name) {
+        mainActivityFragment.search(name);
     }
 }

@@ -63,4 +63,22 @@ public class PendingsAdapter extends RecyclerView.Adapter<PendingsAdapter.ViewHo
         pendingList.add(0,pending);
        notifyItemInserted(0);
     }
+
+    public void search(String name) {
+        pendingList.clear();
+        List<Pending> pendings = new Pendings().byName(name);
+        if (pendings.size() > 0) {
+            pendingList.addAll(pendings);
+        }
+        notifyDataSetChanged();
+    }
+
+    public void reset() {
+        pendingList.clear();
+        List<Pending> pendings = new Pendings().all();
+        if (pendings.size() > 0) {
+            pendingList.addAll(pendings);
+        }
+        notifyDataSetChanged();
+    }
 }

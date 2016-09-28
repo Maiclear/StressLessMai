@@ -1,8 +1,10 @@
 package com.desafiolatam.stressless.views;
 
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -48,10 +50,31 @@ public class MainActivityFragment extends Fragment {
 
         recyclerView.setAdapter(adapter);
 
+        final SwipeRefreshLayout refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.pendingSRL);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                adapter.reset();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (refreshLayout.isRefreshing()) {
+                            refreshLayout.setRefreshing(false);
+                        }
+                    }
+                }, 800);
+            }
+        });
+
     }
 
     public void addPending(Pending pending) {
         adapter.addPending(pending);
         recyclerView.scrollToPosition(0);
     }
+
+    public void search(String name) {
+        adapter.search(name);
+    }
+
 }

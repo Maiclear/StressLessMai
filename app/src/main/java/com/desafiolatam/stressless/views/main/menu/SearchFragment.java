@@ -5,14 +5,22 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.desafiolatam.stressless.R;
+import com.desafiolatam.stressless.data.Pendings;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,12 +31,21 @@ public class SearchFragment extends Fragment {
     private static final int COLLAPSED = 0;
     private AutoCompleteTextView autocompleteTv;
     private ImageView control;
+    private List<String> names;
+    private ArrayAdapter<String> adapter;
+
+    private SearchListener listener;
 
 
     public SearchFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        listener = (SearchListener) context;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -72,6 +89,38 @@ public class SearchFragment extends Fragment {
 
             }
         });
+
+        setCompletion();
+    }
+
+    private void setCompletion() {
+        names = new Pendings().names();
+        adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, names);
+        autocompleteTv.setAdapter(adapter);
+
+        autocompleteTv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String name = autocompleteTv.getText().toString();
+                hidekeyboard();
+                listener.search(name);
+            }
+        });
+        autocompleteTv.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_NEXT || i == EditorInfo.IME_ACTION_DONE || i == EditorInfo.IME_ACTION_SEARCH) {
+                    String name = autocompleteTv.getText().toString();
+                    hidekeyboard();
+                    listener.search(name);
+                    autocompleteTv.dismissDropDown();
+
+                    return true;
+                }
+                return false;
+            }
+        });
+
     }
 
     private void hidekeyboard() {
