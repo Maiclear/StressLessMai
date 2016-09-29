@@ -35,9 +35,18 @@ public class Pendings {
 
     public List<Pending> byName(String name) {
         List<Pending> pendings = new ArrayList<>();
-        String query = "name LIKE" + "'%" + name +"%'";
+        String query = "name LIKE" + "'%" + name +"%'" + " AND done = 0";
         List<Pending> pendingList = Pending.find(Pending.class, query);
         if (pendingList != null && pendingList.size() > 0 ) {
+            pendings.addAll(pendingList);
+        }
+        return pendings;
+    }
+
+    public List<Pending> dones() {
+        List<Pending> pendings = new ArrayList<>();
+        List<Pending> pendingList = Pending.find(Pending.class,"done = 1");
+        if (pendingList != null && pendingList.size() > 0) {
             pendings.addAll(pendingList);
         }
         return pendings;

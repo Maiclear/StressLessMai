@@ -77,4 +77,8 @@ public class MainActivityFragment extends Fragment {
         adapter.search(name);
     }
 
+    public void reset(){
+        adapter.reset();
+    }
+
 }

@@ -15,6 +15,11 @@ public class Pending extends SugarRecord {
     public Pending() {
     }
 
+    public Pending(String name) {
+        this.name = name;
+        done = false;
+    }
+
     public String getName() {
         return name;
     }

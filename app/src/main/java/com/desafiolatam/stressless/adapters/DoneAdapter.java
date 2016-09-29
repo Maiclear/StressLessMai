@@ -7,22 +7,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.desafiolatam.stressless.R;
 import com.desafiolatam.stressless.data.Pendings;
 import com.desafiolatam.stressless.models.Pending;
+import com.desafiolatam.stressless.views.archive.DoneListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Mai_Clear on 9/27/16.
  */
 
-public class PendingsAdapter extends RecyclerView.Adapter<PendingsAdapter.ViewHolder> {
+public class DoneAdapter extends RecyclerView.Adapter<DoneAdapter.ViewHolder> {
 
-    private List<Pending> pendingList = new Pendings().all();
+    private List<Pending> pendingList = new Pendings().dones();
+    private DoneListener listener;
+
+    public DoneAdapter(DoneListener listener) {
+        this.listener = listener;
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -33,9 +39,10 @@ public class PendingsAdapter extends RecyclerView.Adapter<PendingsAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final Pending pending = pendingList.get(position);
 
-        holder.status.setChecked(pending.isDone());
+        holder.setIsRecyclable(false);
+
+        final Pending pending = pendingList.get(position);
 
         holder.name.setText(pending.getName());
 
@@ -44,8 +51,9 @@ public class PendingsAdapter extends RecyclerView.Adapter<PendingsAdapter.ViewHo
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    pending.setDone(true);
+                    pending.setDone(false);
                     pending.save();
+                    listener.click();
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -86,26 +94,6 @@ public class PendingsAdapter extends RecyclerView.Adapter<PendingsAdapter.ViewHo
 
     }
 
-    public void addPending(Pending pending) {
-        pendingList.add(0,pending);
-       notifyItemInserted(0);
-    }
 
-    public void search(String name) {
-        pendingList.clear();
-        List<Pending> pendings = new Pendings().byName(name);
-        if (pendings.size() > 0) {
-            pendingList.addAll(pendings);
-        }
-        notifyDataSetChanged();
-    }
 
-    public void reset() {
-        pendingList.clear();
-        List<Pending> pendings = new Pendings().all();
-        if (pendings.size() > 0) {
-            pendingList.addAll(pendings);
-        }
-        notifyDataSetChanged();
-    }
 }

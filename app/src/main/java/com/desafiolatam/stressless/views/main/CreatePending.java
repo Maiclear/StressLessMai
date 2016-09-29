@@ -16,8 +16,7 @@ public class CreatePending {
     public void validation(String name) {
 
         if (name.length() >0 ){
-            Pending pending = new Pending();
-            pending.setName(name);
+            Pending pending = new Pending(name);
             pending.save();
             callback.created(pending);
 
