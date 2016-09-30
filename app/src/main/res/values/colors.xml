@@ -4,4 +4,18 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorAccentDark">#ad1457</color>
+
+    <color name="black_overlay">#66000000</color>
+    <array name="demo_colors">
+        <item>#D50000</item>
+        <item>#FF9800</item>
+        <item>#4A148C</item>
+        <item>#3F51B5</item>
+        <item>#009688</item>
+        <item>#CDDC39</item>
+        <item>#2196F3</item>
+        <item>#FFC107</item>
+        <item>#795548</item>
+        <item>#607D8B</item>
+    </array>
 </resources>

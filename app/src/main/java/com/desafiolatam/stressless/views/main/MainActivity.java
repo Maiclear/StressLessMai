@@ -9,8 +9,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -18,11 +16,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.desafiolatam.stressless.R;
 import com.desafiolatam.stressless.models.Pending;
-import com.desafiolatam.stressless.views.MainActivityFragment;
+import com.desafiolatam.stressless.views.main.list.PendingListFragment;
 import com.desafiolatam.stressless.views.main.menu.ArchiveCallback;
 import com.desafiolatam.stressless.views.main.menu.SearchListener;
 
@@ -32,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements CreationCallback,
 
     private EditText pendingInput;
     private Dialog dialog;
-    private MainActivityFragment mainActivityFragment;
+    private PendingListFragment pendingListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements CreationCallback,
             Log.d("Pending", "no hay");
         }
 
-        mainActivityFragment = (MainActivityFragment) getSupportFragmentManager().findFragmentById(R.id.main_fragment);
+        pendingListFragment = (PendingListFragment) getSupportFragmentManager().findFragmentById(R.id.main_fragment);
 
         setFab();
 
@@ -110,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements CreationCallback,
 
     @Override
     public void created(Pending pending) {
-        mainActivityFragment.addPending(pending);
+        pendingListFragment.addPending(pending);
         try {
             InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
@@ -129,11 +126,11 @@ public class MainActivity extends AppCompatActivity implements CreationCallback,
 
     @Override
     public void search(String name) {
-        mainActivityFragment.search(name);
+        pendingListFragment.search(name);
     }
 
     @Override
     public void reset() {
-        mainActivityFragment.reset();
+        pendingListFragment.reset();
     }
 }

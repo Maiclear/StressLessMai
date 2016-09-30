@@ -1,5 +1,6 @@
-package com.desafiolatam.stressless.views;
+package com.desafiolatam.stressless.views.main.list;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,23 +15,30 @@ import android.view.ViewGroup;
 import com.desafiolatam.stressless.R;
 import com.desafiolatam.stressless.adapters.PendingsAdapter;
 import com.desafiolatam.stressless.models.Pending;
+import com.desafiolatam.stressless.views.details.DetailsActivity;
+
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment {
+public class PendingListFragment extends Fragment implements PendingListener {
 
 
     private PendingsAdapter adapter;
     private RecyclerView recyclerView;
+    public static final String PENDING_ID = "PENDING_ID";
+    public static final String PENDING_POSITION = "Pending_POSITION";
+    public static final int DETAILS_INTENT = 100;
 
-    public MainActivityFragment() {
+    public PendingListFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        return inflater.inflate(R.layout.fragment_list_pending, container, false);
     }
 
     @Override
@@ -46,7 +54,7 @@ public class MainActivityFragment extends Fragment {
 
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new PendingsAdapter();
+        adapter = new PendingsAdapter(this);
 
         recyclerView.setAdapter(adapter);
 
@@ -81,4 +89,25 @@ public class MainActivityFragment extends Fragment {
         adapter.reset();
     }
 
+    @Override
+    public void click(long id , int position) {
+        Intent intent = new Intent(getContext(),DetailsActivity.class);
+        intent.putExtra(PENDING_ID, id);
+        intent.putExtra(PENDING_POSITION, position);
+        startActivityForResult(intent, DETAILS_INTENT);
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (DETAILS_INTENT == requestCode) {
+            if (RESULT_OK == resultCode) {
+
+            }else {
+                int position = data.getIntExtra(PENDING_POSITION, 0);
+                adapter.delete(position);
+            }
+        }
+    }
 }

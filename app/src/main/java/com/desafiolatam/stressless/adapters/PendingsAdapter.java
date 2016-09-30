@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.desafiolatam.stressless.R;
 import com.desafiolatam.stressless.data.Pendings;
 import com.desafiolatam.stressless.models.Pending;
+import com.desafiolatam.stressless.views.main.list.PendingListener;
 
 import java.util.List;
 
@@ -23,6 +24,11 @@ import java.util.List;
 public class PendingsAdapter extends RecyclerView.Adapter<PendingsAdapter.ViewHolder> {
 
     private List<Pending> pendingList = new Pendings().all();
+    private PendingListener listener;
+
+    public PendingsAdapter(PendingListener listener) {
+        this.listener = listener;
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -39,6 +45,14 @@ public class PendingsAdapter extends RecyclerView.Adapter<PendingsAdapter.ViewHo
 
         holder.name.setText(pending.getName());
 
+        holder.name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                long id = pending.getId();
+                listener.click(id, position);
+            }
+        });
+
         holder.status.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -48,13 +62,13 @@ public class PendingsAdapter extends RecyclerView.Adapter<PendingsAdapter.ViewHo
                         @Override
                         public void run() {
 
-                            try{
+                            try {
                                 pending.setDone(true);
                                 pending.save();
                                 pendingList.remove(position);
                                 notifyDataSetChanged();
 
-                            }catch (IndexOutOfBoundsException e) {
+                            } catch (IndexOutOfBoundsException e) {
 
                             }
 
@@ -88,8 +102,8 @@ public class PendingsAdapter extends RecyclerView.Adapter<PendingsAdapter.ViewHo
     }
 
     public void addPending(Pending pending) {
-        pendingList.add(0,pending);
-       notifyItemInserted(0);
+        pendingList.add(0, pending);
+        notifyDataSetChanged();
     }
 
     public void search(String name) {
@@ -108,5 +122,12 @@ public class PendingsAdapter extends RecyclerView.Adapter<PendingsAdapter.ViewHo
             pendingList.addAll(pendings);
         }
         notifyDataSetChanged();
+    }
+
+    public void delete(int position) {
+        pendingList.get(position).delete();
+        pendingList.remove(position);
+        notifyDataSetChanged();
+
     }
 }
