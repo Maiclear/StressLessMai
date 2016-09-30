@@ -50,7 +50,7 @@ public class ArchiveFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), ArchiveActivity.class);
-                startActivityForResult(intent, ARCHIVE_INTENT);
+                startActivityForResult(intent, ARCHIVE_INTENT); // hacer correr la actividad con espera de un resutlafo
             }
         });
     }

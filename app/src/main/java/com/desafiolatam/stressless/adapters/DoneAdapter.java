@@ -38,7 +38,7 @@ public class DoneAdapter extends RecyclerView.Adapter<DoneAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
 
         holder.setIsRecyclable(false);
 
@@ -46,21 +46,21 @@ public class DoneAdapter extends RecyclerView.Adapter<DoneAdapter.ViewHolder> {
 
         holder.name.setText(pending.getName());
 
-        final int auxPosition = position;
         holder.status.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    pending.setDone(false);
-                    pending.save();
+
                     listener.click();
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
 
                             try{
-                                pendingList.remove(auxPosition);
-                                notifyItemRemoved(auxPosition);
+                                pendingList.remove(position);
+                                notifyItemRemoved(position);
+                                pending.setDone(false);
+                                pending.save();
                             }catch (IndexOutOfBoundsException e) {
 
                             }

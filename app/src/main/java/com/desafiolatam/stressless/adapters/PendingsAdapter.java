@@ -32,27 +32,28 @@ public class PendingsAdapter extends RecyclerView.Adapter<PendingsAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         final Pending pending = pendingList.get(position);
 
         holder.status.setChecked(pending.isDone());
 
         holder.name.setText(pending.getName());
 
-        final int auxPosition = position;
         holder.status.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    pending.setDone(true);
-                    pending.save();
+
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
 
                             try{
-                                pendingList.remove(auxPosition);
-                                notifyItemRemoved(auxPosition);
+                                pending.setDone(true);
+                                pending.save();
+                                pendingList.remove(position);
+                                notifyDataSetChanged();
+
                             }catch (IndexOutOfBoundsException e) {
 
                             }
